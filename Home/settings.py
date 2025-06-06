@@ -16,7 +16,10 @@ SECRET_KEY = 'django-insecure-*2hj)hlp=-=g7t4(7_j2ofon6#0+aa9=+w1=4rp+bt*iqj5avm
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['final-project-sms-2.onrender.com',
+    'localhost',
+    '127.0.0.1',
+    ]
 
 
 # Application definition
