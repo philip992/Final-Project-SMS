@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+
+<div class="main-content px-4 py-6">
+  <h1 class="text-2xl font-bold mb-6">Student Management System</h1>
+
+  <div class="cards">
+    <section class="card">
+      <div class="card-title">Enrolled Students</div>
+      <div class="card-value">{{ enrolled_students_count }}</div>
+      <div class="card-desc">Currently enrolled</div>
+    </section>
+
+    <section class="card">
+      <div class="card-title">Teachers</div>
+      <div class="card-value">{{ teacher_count }}</div>
+      <div class="card-desc">Currently teaching</div>
+    </section>
+  </div>
+</div>
+{% endblock %}

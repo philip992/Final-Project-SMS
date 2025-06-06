@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}Subject List{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-between mb-4">
+    <h2 class="text-2xl font-bold">Subject List</h2>
+    <a href="{% url 'add_subject' %}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">
+        + Add Subject
+    </a>
+</div>
+
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg mb-6">
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th class="px-6 py-3">Subject No.</th>
+                <th class="px-6 py-3">Name of Subject</th>
+                <th class="px-6 py-3">How Many Students Are Enrolled</th>
+                <th class="px-6 py-3">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for subject in subjects %}
+            <tr class="odd:bg-white even:bg-gray-50 border-b dark:border-gray-700 dark:odd:bg-gray-900 dark:even:bg-gray-800">
+                <td class="px-6 py-4">{{ subject.id }}</td>
+                <td class="px-6 py-4">{{ subject.name }}</td>
+                <td class="px-6 py-4">{{ subject.enrollment_set.count }}</td>
+                <td class="px-6 py-4">
+                    <a href="{% url 'subjects' %}?subject_id={{ subject.id }}" class="text-indigo-600 hover:underline">View</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="px-6 py-4 text-center text-gray-500">No subjects found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% if enrolled_students %}
+<h3 class="text-xl font-semibold mb-2">Students Enrolled in Subject ID: {{ selected_subject_id }}</h3>
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 border">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th class="px-6 py-3">Student ID</th>
+                <th class="px-6 py-3">Full Name</th>
+                <th class="px-6 py-3">Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in enrolled_students %}
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <td class="px-6 py-4">{{ student.student_id }}</td>
+                <td class="px-6 py-4">{{ student.user.get_full_name }}</td>
+                <td class="px-6 py-4">{{ student.user.email }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% elif selected_subject_id %}
+<p class="text-gray-500 mt-4">No students are currently enrolled in this subject.</p>
+{% endif %}
+{% endblock %}

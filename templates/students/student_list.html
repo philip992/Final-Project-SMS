@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}Student List{% endblock %}
+
+{% block content %}
+<h2 class="text-2xl font-bold mb-4">Student List</h2>
+
+<!-- Searh bar -->
+<form method="get" class="mb-4 flex items-center">
+    <input type="text" name="q" placeholder="Search by name..."
+           value="{{ request.GET.q|default_if_none:'' }}"
+           class="border border-gray-300 rounded px-4 py-2 w-full max-w-sm mr-2" />
+    <button type="submit"
+            class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+        Search
+    </button>
+</form>
+
+<!-- Add Student Button -->
+<div class="flex justify-end mb-4">
+    <a href="{% url 'enroll_student' %}"
+       class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+        + Add Student
+    </a>
+</div>
+
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th class="px-6 py-3">Student ID</th>
+                <th class="px-6 py-3">First Name</th>
+                <th class="px-6 py-3">Last Name</th>
+                <th class="px-6 py-3">Sex</th>
+                <th class="px-6 py-3">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr class="odd:bg-white even:bg-gray-50 border-b dark:border-gray-700 dark:odd:bg-gray-900 dark:even:bg-gray-800">
+                <td class="px-6 py-4">{{ student.id }}</td>
+                <td class="px-6 py-4">{{ student.user.first_name }}</td>
+                <td class="px-6 py-4">{{ student.user.last_name }}</td>
+                <td class="px-6 py-4">{{ student.get_sex_display }}</td>
+                <td class="px-6 py-4">
+                    <a href="{% url 'student_detail' student.pk %}" class="text-indigo-600 hover:underline">View</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="px-6 py-4 text-center text-gray-500">No students found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

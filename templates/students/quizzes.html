@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}Quizzes{% endblock %}
+
+{% block content %}
+<h2 class="text-2xl font-bold mb-6 text-center">Subjects</h2>
+
+
+<div class="subject-list">
+  {% for subject in subjects %}
+    <a href="?subject_id={{ subject.id }}">{{ subject.name }}</a>
+  {% endfor %}
+</div>
+
+{% if selected_subject %}
+  <h3 class="text-xl font-semibold mb-4 text-center">Students for {{ selected_subject.name }}</h3>
+
+  {% if enrolled_students %}
+    <form method="post">
+      {% csrf_token %}
+      <table class="w-full text-sm text-left text-gray-500">
+        <thead class="text-xs text-white uppercase bg-gray-800">
+          <tr>
+            <th class="px-4 py-3">#</th>
+            <th class="px-4 py-3">Student Name</th>
+            <th class="px-4 py-3">Done Status</th>
+            <th class="px-4 py-3">Quiz Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in enrolled_students %}
+            <tr class="bg-white border-b">
+              <td class="px-4 py-3">{{ forloop.counter }}</td>
+              <td class="px-4 py-3">
+                {{ item.student.user.get_full_name }}<br>
+                <span class="text-sm text-gray-600">Student No.: {{ item.student.student_number }}</span>
+              </td>
+              <td class="px-4 py-3">
+                <label class="inline-flex items-center mr-4">
+                  <input type="radio" name="done_{{ item.enrollment.id }}" value="True"
+                         {% if item.grade and item.grade.done %}checked{% endif %} class="form-radio text-green-500">
+                  <span class="ml-2">Done</span>
+                </label>
+                <label class="inline-flex items-center">
+                  <input type="radio" name="done_{{ item.enrollment.id }}" value="False"
+                         {% if item.grade and not item.grade.done %}checked{% endif %} class="form-radio text-red-500">
+                  <span class="ml-2">Not Done</span>
+                </label>
+              </td>
+              <td class="px-4 py-3">
+                <input type="number" name="quiz_score_{{ item.enrollment.id }}" min="0" max="100" step="0.1"
+                       value="{{ item.grade.quiz_score|default_if_none:'' }}" class="border rounded px-2 py-1 w-24">
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div class="mt-4 text-center">
+        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded">
+          Save Grades
+        </button>
+      </div>
+    </form>
+  {% else %}
+    <p class="text-gray-600 text-center">No students enrolled in this subject.</p>
+  {% endif %}
+{% endif %}
+{% endblock %}

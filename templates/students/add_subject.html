@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Add Subject{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto bg-white p-6 rounded shadow">
+  <h1 class="text-2xl font-bold mb-6">Add New Subject</h1>
+
+  {% if messages %}
+    <div>
+      {% for message in messages %}
+        <p class="mb-4 text-{{ message.tags }}">{{ message }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <form method="POST" action="{% url 'add_subject' %}" class="space-y-6">
+    {% csrf_token %}
+
+    <!-- Subject ID -->
+    <div>
+      <label for="subject_id" class="block font-medium mb-1">Subject ID</label>
+      <input type="text" id="subject_id" name="subject_id" required
+             class="w-full border border-gray-300 rounded px-3 py-2"
+             value="{{ form_data.subject_id|default:'' }}">
+    </div>
+
+    <!-- Subject Namr -->
+    <div>
+      <label for="name" class="block font-medium mb-1">Subject Name</label>
+      <input type="text" id="name" name="name" required
+             class="w-full border border-gray-300 rounded px-3 py-2"
+             value="{{ form_data.name|default:'' }}">
+    </div>
+
+    <button type="submit"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+      Add Subject
+    </button>
+  </form>
+</div>
+{% endblock %}
